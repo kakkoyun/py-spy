@@ -38,9 +38,9 @@ mod cython;
 pub mod dump;
 #[cfg(unwind)]
 mod native_stack_trace;
-mod python_bindings;
+pub mod python_bindings;
 mod python_data_access;
-mod python_interpreters;
+pub mod python_interpreters;
 pub mod python_process_info;
 pub mod python_spy;
 mod python_threading;
@@ -48,7 +48,7 @@ pub mod sampler;
 pub mod stack_trace;
 pub mod timer;
 mod utils;
-mod version;
+pub mod version;
 
 pub use config::Config;
 pub use python_spy::PythonSpy;
