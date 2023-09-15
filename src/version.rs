@@ -3,7 +3,7 @@ use regex::bytes::Regex;
 
 use anyhow::Error;
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Hash)]
 pub struct Version {
     pub major: u64,
     pub minor: u64,
