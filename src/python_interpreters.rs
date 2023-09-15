@@ -297,6 +297,7 @@ macro_rules! Python3Impl {
         }
     };
 }
+
 // Python 3.11
 // Python3.11 is sufficiently different from previous versions that we can't use the macros above
 // to generate implementations of these traits.
@@ -572,6 +573,7 @@ Python3Impl!(v3_3_7);
 // Python 2.7
 PythonCommonImpl!(v2_7_15, PyStringObject);
 PythonCodeObjectImpl!(v2_7_15, PyStringObject, PyStringObject);
+
 impl BytesObject for v2_7_15::PyStringObject {
     fn size(&self) -> usize {
         self.ob_size as usize

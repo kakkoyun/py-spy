@@ -65,6 +65,7 @@ impl NativeStack {
         // TODO: merging the two stack together could happen outside of thread lock
         self.merge_native_stack(frames, native_stack)
     }
+    
     pub fn merge_native_stack(
         &mut self,
         frames: &Vec<Frame>,

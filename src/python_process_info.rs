@@ -27,7 +27,7 @@ pub struct PythonProcessInfo {
     // if python was compiled with './configure --enabled-shared', code/symbols will
     // be in a libpython.so file instead of the executable. support that.
     pub libpython_binary: Option<BinaryInfo>,
-    pub maps: Box<dyn ContainsAddr>,
+    pub maps: Box<dyn ContainsAddr + Send + Sync>,
     pub python_filename: std::path::PathBuf,
     #[cfg(target_os = "linux")]
     pub dockerized: bool,
