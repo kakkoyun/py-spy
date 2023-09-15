@@ -242,7 +242,7 @@ impl PythonCoreDump {
 
         // lets us figure out which thread has the GIL
         let config = Config::default();
-        let threadstate_address = get_threadstate_address(&python_info, &version, &config)?;
+        let threadstate_address = get_threadstate_address(&python_info, &version, config.gil_only)?;
         info!("found threadstate at 0x{:016x}", threadstate_address);
 
         Ok(PythonCoreDump {

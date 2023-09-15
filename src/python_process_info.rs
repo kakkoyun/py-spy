@@ -13,7 +13,6 @@ use proc_maps::{get_process_maps, MapRange};
 use remoteprocess::{Pid, ProcessMemory};
 
 use crate::binary_parser::{parse_binary, BinaryInfo};
-use crate::config::Config;
 use crate::python_bindings::{
     pyruntime, v2_7_15, v3_10_0, v3_11_0, v3_3_7, v3_5_5, v3_6_6, v3_7_0, v3_8_0, v3_9_5,
 };
@@ -523,7 +522,7 @@ where
 pub fn get_threadstate_address(
     python_info: &PythonProcessInfo,
     version: &Version,
-    config: &Config,
+    gil_only: bool,
 ) -> Result<usize, Error> {
     let threadstate_address = match version {
         Version {
@@ -538,7 +537,7 @@ pub fn get_threadstate_address(
                     addr as usize + offset
                 } else {
                     error_if_gil(
-                        config,
+                        gil_only,
                         version,
                         "unknown pyruntime.gilstate.tstate_current offset",
                     )?;
@@ -546,7 +545,7 @@ pub fn get_threadstate_address(
                 }
             }
             None => {
-                error_if_gil(config, version, "failed to find _PyRuntime symbol")?;
+                error_if_gil(gil_only, version, "failed to find _PyRuntime symbol")?;
                 0
             }
         },
@@ -557,7 +556,7 @@ pub fn get_threadstate_address(
             }
             None => {
                 error_if_gil(
-                    config,
+                    gil_only,
                     version,
                     "failed to find _PyThreadState_Current symbol",
                 )?;
@@ -569,13 +568,13 @@ pub fn get_threadstate_address(
     Ok(threadstate_address)
 }
 
-fn error_if_gil(config: &Config, version: &Version, msg: &str) -> Result<(), Error> {
+fn error_if_gil(gil_only: bool, version: &Version, msg: &str) -> Result<(), Error> {
     lazy_static! {
         static ref WARNED: std::sync::atomic::AtomicBool =
             std::sync::atomic::AtomicBool::new(false);
     }
 
-    if config.gil_only {
+    if gil_only {
         if !WARNED.load(std::sync::atomic::Ordering::Relaxed) {
             // only print this once
             eprintln!(

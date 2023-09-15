@@ -66,7 +66,7 @@ impl PythonSpy {
         info!("Found interpreter at 0x{:016x}", interpreter_address);
 
         // lets us figure out which thread has the GIL
-        let threadstate_address = get_threadstate_address(&python_info, &version, config)?;
+        let threadstate_address = get_threadstate_address(&python_info, &version, config.gil_only)?;
 
         let version_string = format!("python{}.{}", version.major, version.minor);
 
